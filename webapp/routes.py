@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, url_for
 from .models import User
 bp = Blueprint('main', __name__)
 
@@ -35,4 +35,6 @@ def login():
 
 @bp.route('/users')
 def users():
-    return ", ".join([user.username for user in active_users])
+    return render_template('users.html',  active_users=active_users)
+
+

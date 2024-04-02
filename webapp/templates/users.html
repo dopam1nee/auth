@@ -10,12 +10,11 @@
     <title>Auth</title>
   </head>
   <body>
-    <form method="POST" action="/register">
-      <div>
-        <input type="text" name="username" placeholder="Login..." />
-        <input type="password" name="password" placeholder="Password..." />
-      </div>
-      <button type="submit">Sign up</button>
-    </form>
+    <div id="users">
+      <h2>Users:</h2>
+      {% for user in active_users %}
+      <h3>{{ user.username }}</h3>
+      {% endfor %}
+    </div>
   </body>
 </html>
