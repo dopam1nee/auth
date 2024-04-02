@@ -16,5 +16,18 @@
       <h3>{{ user.username }}</h3>
       {% endfor %}
     </div>
+
+    <script>
+      window.addEventListener("beforeunload", function (event) {
+        let username = "{{ current_user.username }}";
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", "/logout", false);
+        xhr.setRequestHeader(
+          "Content-Type",
+          "application/x-www-form-urlencoded"
+        );
+        xhr.send("username=" + username);
+      });
+    </script>
   </body>
 </html>

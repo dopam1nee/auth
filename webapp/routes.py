@@ -29,12 +29,26 @@ def login():
         for user in active_users:
             if user.username == username and user.password == password:
                 return f"Logged in as: {username}"
-
+        
         return "Invalid username or password"
     return render_template('login.html')
 
+@bp.route('/logout', methods=['POST'])
+def logout():
+    if request.method == 'POST':
+        username = request.form['username']
+
+        for user in active_users:
+            if user.username == username:
+                active_users.remove(user)
+                break
+
+        return "Logged out successfully"
+
 @bp.route('/users')
 def users():
-    return render_template('users.html',  active_users=active_users)
+    current_user = None
+    if active_users:
+        current_user = active_users[-1]
 
-
+    return render_template('users.html', active_users=active_users, current_user=current_user)
