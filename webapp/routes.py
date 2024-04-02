@@ -1,30 +1,38 @@
-from flask import render_template, request, redirect, url_for
-from webapp import app, db
-from webapp.models import User
+from flask import Blueprint, render_template, request
+from .models import User
+bp = Blueprint('main', __name__)
 
-@app.route('/')
+active_users = []
+
+@bp.route('/')
 def home():
     return 'Home Page'
 
-@app.route('/register', methods=['GET', 'POST'])
+@bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        user = User(username=username, password=password)
-        db.session.add(user)
-        db.session.commit()
-        return 'User registered successfully'
+        username = request.form['username']
+        password = request.form['password']
+
+        user = User(username, password)
+        active_users.append(user)
+
+        return f"Registered user: {username}"
     return render_template('register.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        user = User.query.filter_by(username=username).first()
-        if user and user.password == password:
-            return 'Logged in successfully'
-        else:
-            return 'Invalid username or password'
+        username = request.form['username']
+        password = request.form['password']
+
+        for user in active_users:
+            if user.username == username and user.password == password:
+                return f"Logged in as: {username}"
+
+        return "Invalid username or password"
     return render_template('login.html')
+
+@bp.route('/users')
+def users():
+    return ", ".join([user.username for user in active_users])
