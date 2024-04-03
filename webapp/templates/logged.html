@@ -7,14 +7,17 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='css/index.css') }}"
     />
-    <title>Users</title>
+    <title>Logged</title>
   </head>
   <body>
-    <div id="users">
-      <h1>Users:</h1>
-      {% for user in active_users %} {% if user.is_online %}
-      <h2>{{ user.username }}</h2>
-      {% endif %} {% endfor %}
-    </div>
+    <h1>You're logged in</h1>
+
+    <script>
+      window.onbeforeunload = function () {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "/offline", false);
+        xhr.send();
+      };
+    </script>
   </body>
 </html>
